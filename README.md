@@ -1,5 +1,5 @@
 # SenseHatGyro
-The gyroToDPS.c program converts the raw readings of IMU sensor into degrees per second. 
+The gyro_to_dps.c program converts the raw readings of IMU sensor into degrees per second. 
 
 # Compilation
 ````
