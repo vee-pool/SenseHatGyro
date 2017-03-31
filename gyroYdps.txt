@@ -1,2 +1,0 @@
-This is Y axis gyro data in Degrees per second
-

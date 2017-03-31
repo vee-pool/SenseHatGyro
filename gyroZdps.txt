@@ -1,2 +1,0 @@
-This is Z axis gyro data in Degrees per second
-
