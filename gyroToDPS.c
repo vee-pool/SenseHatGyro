@@ -1,10 +1,40 @@
-/*
-This program takes raw imu data file (generated from Sense Hat) as input.
-And saves gyro data with respect x, y, z axis in separate files "gyroXdps", "gyroYdps", "gyroZdps" respectively.
-Raw data is converted to Degrees per Seconds while saving in output files.
-Another raw data file in repository is "data_imu" .
-To Compile: gcc -Wall gyroToDPS.c -lm -o gyroToDPS
-*/
+/********************************************************************************************************
+ * FILE NAME: gyroToDPS.c 																				*
+ *																										*
+ * PURPOSE: Converting raw IMU data into unit of degrees per second.									*
+ *																										*
+ * FILE REFERENCES:																						*
+ *																										*
+ * NAME							I/O 			DESCRIPTION												*
+ *																										*
+ * data_imu.txt					I 				Raw IMU sensor data collected from SenseHAT				*
+ * data_imu2.txt				I 				Raw IMU sensor data collected from SenseHAT				*
+ * 																										*
+ * gyro_x_dps.txt				O 				Storing gyroscope X axis data in degrees per Seconds 	*
+ * gyro_y_dps.txt				O 				Storing gyroscope Y axis data in degrees per Seconds 	*
+ * gyro_z_dps.txt				O 				Storing gyroscope Z axis data in degrees per Seconds 	*
+ * 																										*
+ * EXTERNAL VARIABLES:	none																			*
+ *																										*
+ * EXTERNAL REFERENCES:	none 																			*
+ *																										*
+ * ABNORMAL TERMINATION CONDITIONS, ERRORS AND WARNING MESSAGES:										*
+ *		Abnormal termination if input file cannot be opened.											*
+ * 																										*
+ * ASSUMPTIONS, CONSTRAINTS	AND RESTRICTIONS															*
+ * 		Assuming input files in specific format which they are.											*
+ *																										*
+ * NOTES:																								*
+ *																										*
+ * REQUIREMENTS / FUNCTIONAL SPECIFICATION REFERENCES:													*
+ *																										*
+ * DEVELOPMENT HISTORY:																					*
+ *																										*
+ * DATE			AUTHOR		CHANGE ID 		RELEASE		DESCRIPTION OF CHANGE							*
+ *																										*
+ *																										*
+ * 31/3/2017	vee-pool								Convert to NASA C style							*
+ ********************************************************************************************************/
 
 #include <stdio.h>
 #include <string.h>
@@ -12,13 +42,13 @@ To Compile: gcc -Wall gyroToDPS.c -lm -o gyroToDPS
 
 int main(int argc, char const *argv[])
 {
-  FILE *infile, *outfilex, *outfiley, *outfilez;
+  FILE *infile, *outfile_x, *outfile_y, *outfile_z;
 
   float buff;
   char temp[20];
   int ret_val=0;
 
-  infile = fopen ("data_imu2.txt","r");
+  infile = fopen ("data_imu2.txt", "r");
   
   if (infile == NULL)
   {
@@ -26,58 +56,58 @@ int main(int argc, char const *argv[])
     return 0;
   }
   
-  outfilex = fopen ("gyroXdps.txt", "w");
-  outfiley = fopen ("gyroYdps.txt", "w");
-  outfilez = fopen ("gyroZdps.txt", "w");
+  outfile_x = fopen ("gyro_x_dps.txt", "w");
+  outfile_y = fopen ("gyro_y_dps.txt", "w");
+  outfile_z = fopen ("gyro_z_dps.txt", "w");
 
-  fputs("This is X axis gyro data in Degrees per second\n\n", outfilex);
-  fputs("This is Y axis gyro data in Degrees per second\n\n", outfiley);
-  fputs("This is Z axis gyro data in Degrees per second\n\n", outfilez);
+  fputs("This is X axis gyro data in Degrees per second\n\n", outfile_x);
+  fputs("This is Y axis gyro data in Degrees per second\n\n", outfile_y);
+  fputs("This is Z axis gyro data in Degrees per second\n\n", outfile_z);
 
-  ret_val = fscanf (infile,"%s",temp);
+  ret_val = fscanf (infile, "%s", temp);
 
   while (ret_val != EOF)
   {
-    if ( strcmp(temp, "gyro:")==0 )
+    if ( strcmp(temp, "gyro:") == 0 )
     {
-      ret_val = fscanf (infile,"%s",temp);
+      ret_val = fscanf (infile, "%s", temp);
 
       if ( strcmp(temp, "x:")==0 )
       {
-        ret_val = fscanf (infile,"%f",&buff);
+        ret_val = fscanf (infile, "%f", &buff);
 
-        fprintf(outfilex, "%0.9f", buff*0.07);        
-        fputc('\n',outfilex);
+        fprintf(outfile_x, "%0.9f", buff*0.07);        
+        fputc('\n',outfile_x);
       }
 
-      ret_val = fscanf (infile,"%s",temp);
+      ret_val = fscanf (infile, "%s", temp);
 
       if ( strcmp(temp, "y:")==0 )
       {
-        ret_val = fscanf (infile,"%f",&buff);
+        ret_val = fscanf (infile, "%f",  &buff);
 
-        fprintf(outfiley, "%0.9f", buff*0.07);
-        fputc('\n',outfiley);
+        fprintf(outfile_y, "%0.9f", buff*0.07);
+        fputc('\n', outfile_y);
       }
 
-      ret_val = fscanf (infile,"%s",temp);
+      ret_val = fscanf (infile, "%s", temp);
 
       if ( strcmp(temp, "z:")==0 )
       {
-        ret_val = fscanf (infile,"%f",&buff);
+        ret_val = fscanf (infile, "%f", &buff);
 
-        fprintf(outfilez, "%0.9f", buff*0.07);
-        fputc('\n',outfilez);
+        fprintf(outfile_z, "%0.9f", buff*0.07);
+        fputc('\n', outfile_z);
       }
     }
 
-    ret_val = fscanf (infile,"%s",temp);
+    ret_val = fscanf (infile, "%s", temp);
   }
 
   fclose(infile);
-  fclose(outfilex);
-  fclose(outfiley);
-  fclose(outfilez);
+  fclose(outfile_x);
+  fclose(outfile_y);
+  fclose(outfile_z);
 
   return 0;
 }
